@@ -11,35 +11,37 @@ import re
 os.system("")
 
 # Main function for command line inputs
+
+
 def main():
     # Initializing argoarse module to get parser method
     parser = argparse.ArgumentParser(description="""
 Bitcoin Price Notification Application.
 """, epilog="Author - Neha Jamwal")
-    # adding argument for time interval and setting default us 
+    # adding argument for time interval and setting default us
     parser.add_argument("-t", "--time_interval", type=int, nargs=1,
                         default=[1], metavar="time_interval",
                         help="Time interval for updates, default is 1 min")
-    # adding argument for alert threshold 
+    # adding argument for alert threshold
     parser.add_argument("-a", "--alert_threshold", type=int, nargs=1, default=[
                         710000], metavar="alert_threshold",
-                        help="Threshold price, default is ₹ 7 lakhs")
+                        help="Threshold price, default is ₹710000")
     # adding argument for  notification destinaion selection  by default ifttt
     parser.add_argument("-d", "--destination", default="ifttt",
                         metavar="destination",
                         help="""Destination for price update :
--d telegram/twitter/IFTTT 
+-d telegram/twitter/IFTTT
 By default is IFTTT""")
 
     args = parser.parse_args()
-#printing on command line
+    # printing on command line
     print("""Bitcoin Notifier started\n""",
-            'Time interval is ', args.time_interval[0],
-            'min\n Threshold is ₹', args.alert_threshold[0],
-            '\n Destination is ', args.destination, '\n\n')
+          "Time interval is ", args.time_interval[0],
+          "min\n Threshold is ₹", args.alert_threshold[0],
+          "\n Destination is ", args.destination, "\n\n")
 
     while True:
-        # getting email of the user 
+        # getting email of the user
         email = input("Provide Your Email For Threshold Price Alert: \n")
         regex = r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b"
         # check if the email is valid or not
@@ -76,7 +78,7 @@ def getBitcoinPrice():
     response_json = response.json()
     # getting bitcoin price in INR
     rateFloat = round(float(response_json["bpi"]["INR"]["rate_float"]))
-    print("Current Bitcoin Value: ", rateFloat)
+    print("Current Bitcoin Value: ₹", rateFloat)
     return rateFloat
 
 
@@ -85,7 +87,7 @@ def postNotification(data, dest):
 
     date = data["date"]
     price = data["bitcoinPrice"]
-    # defining the data format 
+    # defining the data format
     data = {"value1": date, "value2": price}
 
     # On choosing destination telegram
@@ -135,7 +137,7 @@ Current Bitcoin Price: ₹{} ,\n
 
     email_server.quit()
 
-    #print if successfull
+    # print if successfull
 
     print("Threshold Alert Email Sent\n")
 
@@ -150,7 +152,7 @@ def bitcoinPriceNotification(timeInterval, threshold, destination, email):
         while True:
             # getting the bitcoin price
             bitcoinPrice = getBitcoinPrice()
-            #storing date and time
+            # storing date and time
             date = datetime.now().strftime("%d.%m.%Y %H:%M")
             bitcoinData = {
                 "date": date,
